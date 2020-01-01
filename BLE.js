@@ -4,9 +4,14 @@ import {
   BleError 
 } from 'react-native-ble-plx';
 import {
-  View,
-  Text
+  View
 } from 'react-native';
+
+import { connect } from 'react-redux';
+import {addBLE} from './actions';
+
+import BLEList from './BLElist';
+import { Container, Header, Content, List, ListItem, Text} from 'native-base';
 import Base64 from './Base64'
 
 export class BLE extends Component {
@@ -33,7 +38,13 @@ export class BLE extends Component {
     };
 
     componentDidMount (){
-        this.scanAndConnect();
+      console.log('BLE props', this.props);
+      const subscription = this.manager.onStateChange((state) => {
+        if (state === 'PoweredOn') {
+            this.scanAndConnect();
+            subscription.remove();
+        }
+    }, true);
     };
 
     publishNewColor(newcolor){
@@ -66,50 +77,49 @@ export class BLE extends Component {
       }
     };
 
-    async scanAndConnect() {
+    scanAndConnect() {
         this.manager.startDeviceScan(null, null, (error, device) => {
             this.setState({"status":"Scanning..."});
-            console.log("Scanning...")
           if (error) {
+            console.log(error);
             //App._logError("SCAN", error);
             //this.setState({"info":device.name});
             //_logError("SCAN", error)
             
             //return null;
           }
-          console.log("device",device);
           if(device !== null){
-            console.log("device is not null")
+           // console.log("device is not null")
             this.device = device
             this.setState({"name":device.name});
             //console.log("Device:" + device.name)
+            this.props.addBLE(device);
           
-          
-          if (device.name === 'tuxpi') {
-            this.setState({"status":"Connecting..."});
-           // console.log("Connecting")
-            this.manager.stopDeviceScan()
-            device.connect()
-              .then((device) => {
-                this.setState({"status":"Discovering..."});
-               // console.log("Discovering")
-                return device.discoverAllServicesAndCharacteristics()
-              })
-              .then((device) => {
-                this.setState({"status":"Setting notifications..."});
-                console.log("Setting notifications")
-                return device;
-              })
-              .then((device) => {
-                this.setState({"status":"listening..."});
-                console.log("listening")
-                //this.device = device;
-                return device;
-              }, (error) => {
-                console.log(this._logError("SCAN", error));
-                //return null;
-              })
-          }
+          // if (device.name === 'tuxpi') {
+          //   this.setState({"status":"Connecting..."});
+          //  // console.log("Connecting")
+          //   this.manager.stopDeviceScan()
+          //   device.connect()
+          //     .then((device) => {
+          //       this.setState({"status":"Discovering..."});
+          //      // console.log("Discovering")
+          //       return device.discoverAllServicesAndCharacteristics()
+          //     })
+          //     .then((device) => {
+          //       this.setState({"status":"Setting notifications..."});
+          //       console.log("Setting notifications")
+          //       return device;
+          //     })
+          //     .then((device) => {
+          //       this.setState({"status":"listening..."});
+          //       console.log("listening")
+          //       //this.device = device;
+          //       return device;
+          //     }, (error) => {
+          //       console.log(this._logError("SCAN", error));
+          //       //return null;
+          //     })
+          // }
         }
         });
       };
@@ -153,9 +163,37 @@ export class BLE extends Component {
         );
       };
 
+      handleClick = (device) => {
+        console.log('clicked',device['BLE']);
+        this.setState({"status":"Connecting..."});
+           // console.log("Connecting")
+            this.manager.stopDeviceScan()
+            device['BLE'].connect()
+              .then((device) => {
+                this.setState({"status":"Discovering..."});
+               // console.log("Discovering")
+                return device.discoverAllServicesAndCharacteristics()
+              })
+              .then((device) => {
+                this.setState({"status":"Setting notifications..."});
+                console.log("Setting notifications")
+                return device;
+              })
+              .then((device) => {
+                this.setState({"status":"listening..."});
+                console.log("listening")
+                //this.device = device;
+                return device;
+              }, (error) => {
+                console.log(this._logError("SCAN", error));
+                //return null;
+              })
+      }
+
     render() {
         return ( 
-            <View >
+            <Container>
+              <Header />
                 <Text>
                     Device Name: { this.state.name} 
                 </Text>
@@ -165,9 +203,27 @@ export class BLE extends Component {
                 <Text>
                     info: {this.state.info} 
                 </Text>
-            </View>
+                <Content>
+        <List>
+        {this.props.BLEList.map(BLE =>{
+          return <ListItem key={BLE.id}  button={true} onPress={() => this.handleClick({BLE})} ><Text>{BLE.name}</Text></ListItem> 
+        })}
+          </List>
+        </Content>
+            </Container>
         );
     }
 }
 
-export default BLE;
+function mapStateToProps(state){
+  console.log(state);
+  return{
+    BLEList : state.BLEs
+  };
+}
+
+const mapDispatchToProps = dispatch => ({
+  addBLE: device => dispatch(addBLE(device))
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(BLE);
