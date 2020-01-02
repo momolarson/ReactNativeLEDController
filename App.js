@@ -12,7 +12,8 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import rootReducer from './reducers/index';
 
-import BLE from './BLE';
+import BLEList from './BLElist';
+import LEDColorPicker from './ColorPicker';
 
 import { Container, Header,Text } from 'native-base';
 
@@ -35,7 +36,8 @@ import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 
 const MainNavigator = createStackNavigator({
-  Home: {screen: BLE}
+  Home: {screen: BLEList},
+  ColorPicker: {screen:LEDColorPicker}
 });
 
 const store = createStore(rootReducer);

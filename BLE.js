@@ -13,11 +13,14 @@ import {addBLE} from './actions';
 import BLEList from './BLElist';
 import { Container, Header, Content, List, ListItem, Text} from 'native-base';
 import Base64 from './Base64'
+import { withNavigation } from 'react-navigation';
+import {AppState} from 'react-native' 
 
-export class BLE extends Component {
+class BLE extends React.Component {
     constructor(props) {
         super(props);
         //BLE 
+       // console.log("props",props)
         this.manager = new BleManager()
         this.prefixUUID = "000100"
         this.suffixUUID = "-0000-1000-8000-00805f9b34fb"
@@ -28,6 +31,7 @@ export class BLE extends Component {
         this.serviceUUID = this.serviceUUID.bind(this)
         this.notifyUUID = this.notifyUUID.bind(this)
         this.writeUUID = this.writeUUID.bind(this)
+        this.handleClick = this.handleClick.bind(this)
         this._log = this._log.bind(this)
         this._logError = this._logError.bind(this)
         this.state = {
@@ -37,18 +41,42 @@ export class BLE extends Component {
           };
     };
 
+    componentDidUpdate(prevprops){
+      if(prevprops.color != this.props.color){
+        console.log("BLE_componentupdate_prev",prevprops)
+        console.log("BLE_componentupdate",this.props)
+        this.publishNewColor(this.props.color);
+      } else if (prevprops.connectedDevice !== this.props.connectedDevice){
+        console.log("connect that device:",this.props.connectedDevice)
+        this.handleClick(this.props.connectedDevice);
+      }
+      
+    };
+
     componentDidMount (){
-      console.log('BLE props', this.props);
+     // console.log('BLE props', this.props);
       const subscription = this.manager.onStateChange((state) => {
         if (state === 'PoweredOn') {
             this.scanAndConnect();
             subscription.remove();
         }
     }, true);
+    AppState.addEventListener('change', this.handleAppStateChange);
     };
 
+    componentWillUnmount() {
+      AppState.removeEventListener('change', this.handleAppStateChange);
+    }
+
+    handleAppStateChange = (nextAppState) => {
+      if (nextAppState === 'inactive') {
+        console.log('the app is closed');
+        this.device.cancelConnection();
+      }    
+    }
+
     publishNewColor(newcolor){
-      console.log(newcolor)
+      console.log("publish new color: ",newcolor)
       this.setState({"status":"Changing Color to: " + newcolor,"color":newcolor})
       this.UpdateDevice("00010000-89BD-43C8-9231-40F6E305F96D", "00010001-89BD-43C8-9231-40F6E305F96D",newcolor)
     }
@@ -72,6 +100,7 @@ export class BLE extends Component {
         this.setState({"status":"Color Changed to: " + base64});
         return true;
       } catch(error){
+        console.log("update Error:", error)
         this._logError("UPDATE", error)
         return false;
       }
@@ -164,24 +193,28 @@ export class BLE extends Component {
       };
 
       handleClick = (device) => {
-        console.log('clicked',device['BLE']);
+        console.log('BLE clicked',device['BLE']);
         this.setState({"status":"Connecting..."});
            // console.log("Connecting")
             this.manager.stopDeviceScan()
+            this.device = device['BLE'];
             device['BLE'].connect()
               .then((device) => {
                 this.setState({"status":"Discovering..."});
                // console.log("Discovering")
-                return device.discoverAllServicesAndCharacteristics()
+                let characteristics = device.discoverAllServicesAndCharacteristics()
+                console.log("characteristics:", characteristics);
+                return characteristics;
               })
               .then((device) => {
                 this.setState({"status":"Setting notifications..."});
-                console.log("Setting notifications")
+               // console.log("Setting notifications")
                 return device;
               })
               .then((device) => {
                 this.setState({"status":"listening..."});
-                console.log("listening")
+               // console.log("listening")
+                this.props.navigation.navigate('ColorPicker');
                 //this.device = device;
                 return device;
               }, (error) => {
@@ -191,34 +224,24 @@ export class BLE extends Component {
       }
 
     render() {
+      //console.log(this.props);
         return ( 
             <Container>
-              <Header />
-                <Text>
-                    Device Name: { this.state.name} 
-                </Text>
-                <Text>
+                <Text style={{backgroundColor: this.props.color}}>
                     Status: {this.state.status} 
                 </Text>
-                <Text>
-                    info: {this.state.info} 
-                </Text>
-                <Content>
-        <List>
-        {this.props.BLEList.map(BLE =>{
-          return <ListItem key={BLE.id}  button={true} onPress={() => this.handleClick({BLE})} ><Text>{BLE.name}</Text></ListItem> 
-        })}
-          </List>
-        </Content>
+                <Text>Color: {this.props.color}</Text>
             </Container>
         );
     }
 }
 
 function mapStateToProps(state){
-  console.log(state);
+  //console.log(state);
   return{
-    BLEList : state.BLEs
+    BLEList : state.BLEs.BLEList,
+    color:state.BLEs.color,
+    connectedDevice: state.BLEs.connectedDevice
   };
 }
 
@@ -226,4 +249,4 @@ const mapDispatchToProps = dispatch => ({
   addBLE: device => dispatch(addBLE(device))
 })
 
-export default connect(mapStateToProps,mapDispatchToProps)(BLE);
+export default connect(mapStateToProps,mapDispatchToProps,null,{ forwardRef: true })(withNavigation(BLE));

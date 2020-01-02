@@ -1,27 +1,37 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, List, ListItem, Text } from 'native-base';
+import { Container, Header, Content, List, ListItem, Text, Footer } from 'native-base';
+import BLE from './BLE';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import { withNavigation } from 'react-navigation';
+import {connectDevice} from './actions';
 
 
 class BLEList extends Component {
+  constructor(props){
+    super(props);
+  }
+
   handleClick = (device) => {
-    console.log('clicked',this.props);
+    //this.ble.current.handleClick(device);
+    this.props.connectDevice(device);
+    //this.props.navigation.navigate('ColorPicker');
   }
   render() {           
-    console.log("BLEList",this.props.BLEList);
     return (
       <Container>
         <Header />
         <Content>
         <List>
         {this.props.BLEList.map(BLE =>{
-          console.log("BLE",BLE);
+          ///console.log("BLE",BLE);
           return <ListItem key={BLE.id}  button={true} onPress={() => this.handleClick({BLE})} ><Text>{BLE.name}</Text></ListItem> 
         })}
           </List>
         </Content>
+        <Footer>
+          <BLE ref={this.ble}></BLE>
+        </Footer>
       </Container>
     );
   }
@@ -29,8 +39,12 @@ class BLEList extends Component {
 
 function mapStateToProps(state){
   return{
-    BLEList : state.BLEs
+    BLEList : state.BLEs['BLEList']
   };
 }
 
-export default connect(mapStateToProps)(withNavigation(BLEList));
+const mapDispatchToProps = dispatch => ({
+  connectDevice: device => dispatch(connectDevice(device))
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(withNavigation(BLEList));
