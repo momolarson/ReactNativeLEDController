@@ -1,7 +1,8 @@
 const INITIAL_STATE = {
   BLEList: [],
   color: '#800080',
-  connectedDevice: {}
+  connectedDevice: {},
+  status: 'disconnected'
 };
 
 const BLEReducer = (state =INITIAL_STATE, action) => {
@@ -17,22 +18,32 @@ const BLEReducer = (state =INITIAL_STATE, action) => {
          return {
            BLEList: newBLE,
            color: state.color,
-           connectedDevice: state.connectedDevice
+           connectedDevice: state.connectedDevice,
+           status: action.status
           };
       }
-    case 'CHANGE_COLOR':
+    case 'CHANGED_COLOR':
       return {
         BLEList: state.BLEList,
         color: action.newColor,
-        connectedDevice: state.connectedDevice
+        connectedDevice: state.connectedDevice,
+        status: action.status
       };
-    case 'CONNECT_DEVICE':
-      console.log("connect device", action);
+    case 'CONNECTED_DEVICE':
+      console.log("Reducer connected device", action);
       return {
         BLEList: state.BLEList,
         color: state.color,
-        connectedDevice: action.connectedDevice
+        connectedDevice: action.connectedDevice,
+        status: action.status
        };
+    case 'CHANGE_STATUS':
+      console.log("change status:", action.status)
+      return {
+        BLEList: state.BLEList,
+        color: state.color,
+        connectedDevice: action.connectedDevice,
+        status: action.status}
     default:
       return state;
   }

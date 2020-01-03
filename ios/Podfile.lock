@@ -188,8 +188,6 @@ PODS:
   - react-native-ble-plx-swift (1.1.0)
   - react-native-safe-area-context (0.6.2):
     - React
-  - react-native-slider (2.0.8):
-    - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
   - React-RCTAnimation (0.61.5):
@@ -251,7 +249,6 @@ DEPENDENCIES:
   - react-native-ble-plx (from `../node_modules/react-native-ble-plx`)
   - react-native-ble-plx-swift (from `../node_modules/react-native-ble-plx`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
-  - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -306,8 +303,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-ble-plx"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
-  react-native-slider:
-    :path: "../node_modules/@react-native-community/slider"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -353,8 +348,7 @@ SPEC CHECKSUMS:
   React-jsinspector: fa0ecc501688c3c4c34f28834a76302233e29dc0
   react-native-ble-plx: 05e16667ebf56cf802986379fd58a377847885e8
   react-native-ble-plx-swift: e0d041529bd7ae66eb9731123eca3df3d132e8ec
-  react-native-safe-area-context: 25260c5d0b9c53fd7aa88e569e2edae72af1f6a3
-  react-native-slider: 3a1cfd00c9c31068251b536822f7192e8d1d6b6f
+  react-native-safe-area-context: a1d322930b8c5d04ebeb77cc47cc97575ad27203
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -365,7 +359,7 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
-  RNCMaskedView: dd13f9f7b146a9ad82f9b7eb6c9b5548fcf6e990
+  RNCMaskedView: c8b53164b85ecf94c9a44d67082df0f03c1f74cc
   RNGestureHandler: 02905abe54e1f6e59c081a10b4bd689721e17aa6
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 

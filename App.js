@@ -9,8 +9,14 @@
 import React from 'react';
 
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore,applyMiddleware } from 'redux';
 import rootReducer from './reducers/index';
+import thunk from 'redux-thunk';
+
+import { 
+  BleManager,
+  BleError 
+} from 'react-native-ble-plx';
 
 import BLEList from './BLElist';
 import LEDColorPicker from './ColorPicker';
@@ -40,9 +46,11 @@ const MainNavigator = createStackNavigator({
   ColorPicker: {screen:LEDColorPicker}
 });
 
-const store = createStore(rootReducer);
+const DeviceManager = new BleManager();
 
 let Navigation = createAppContainer(MainNavigator);
+
+const store = createStore(rootReducer, applyMiddleware(thunk.withExtraArgument(DeviceManager)));
 
 const App: () => React$Node = () => {
 

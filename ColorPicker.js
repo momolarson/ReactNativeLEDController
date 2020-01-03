@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Container, Header, Footer, Content, List, ListItem, Text } from 'native-base';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {changeColor} from './actions';
+import {updateColor} from './actions';
 import { withNavigation } from 'react-navigation';
 import { ColorPicker, TriangleColorPicker,toHsv,fromHsv } from 'react-native-color-picker'
 
@@ -24,7 +24,7 @@ class LEDColorPicker extends Component {
 
   onColorChange(color) {
     this.setState({"color": color })
-    this.props.changeColor(fromHsv(color));
+    this.props.updateColor(fromHsv(color));
   }
 
   render() {           
@@ -52,7 +52,7 @@ function mapStateToProps(state){
 }
 
 const mapDispatchToProps = dispatch => ({
-  changeColor: color => dispatch(changeColor(color))
+  updateColor: color => dispatch(updateColor(color))
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(withNavigation(LEDColorPicker));
