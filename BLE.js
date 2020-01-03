@@ -14,7 +14,7 @@ import BLEList from './BLElist';
 import { Container, Header, Content, List, ListItem, Text} from 'native-base';
 import Base64 from './Base64'
 import { withNavigation } from 'react-navigation';
-import {AppState} from 'react-native' 
+
 
 class BLE extends React.Component {
     constructor(props) {
@@ -61,12 +61,7 @@ class BLE extends React.Component {
             subscription.remove();
         }
     }, true);
-    AppState.addEventListener('change', this.handleAppStateChange);
     };
-
-    componentWillUnmount() {
-      AppState.removeEventListener('change', this.handleAppStateChange);
-    }
 
     handleAppStateChange = (nextAppState) => {
       if (nextAppState === 'inactive') {

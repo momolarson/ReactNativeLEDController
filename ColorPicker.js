@@ -32,7 +32,6 @@ class LEDColorPicker extends Component {
       <Container>
         <Header />
         <ColorPicker
-            oldColor={toHsv(this.state.color)}
             color={toHsv(this.state.color)}
             onColorChange={(colorval) => this.setState({color: colorval})}
             onColorSelected={this.onColorChange}
