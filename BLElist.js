@@ -9,10 +9,9 @@ import {
   TouchableHighlight,
   View
 } from 'react-native';
-import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
-import { Container, Header, Content, Footer,Button } from 'native-base';
+import { SwipeListView } from 'react-native-swipe-list-view';
+import { Container, Header, Content, Footer } from 'native-base';
 import BLE from './BLE';
-import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import { withNavigation } from 'react-navigation';
 import {connectDevice,startScan} from './actions';
@@ -20,27 +19,24 @@ import {connectDevice,startScan} from './actions';
 
 
 class BLEList extends Component {
-  
 
   constructor(props){
     super(props);
     this.props.startScan();
     this.rowSwipeAnimatedValues = {};
-    
-        Array(this.props.BLEList.length)
-            .fill('')
-            .forEach((_, i) => {
-                this.rowSwipeAnimatedValues[`${i}`] = new Animated.Value(0);
-            });
-            console.log(this.rowSwipeAnimatedValues)
+
+    Array(this.props.BLEList.length)
+        .fill('')
+        .forEach((_, i) => {
+            this.rowSwipeAnimatedValues[`${i}`] = new Animated.Value(0);
+        });
+        console.log(this.rowSwipeAnimatedValues)
   }
 
   onSelected = (id) => {
-    console.log("onSelected",id);
   }
 
   closeRow(rowMap, rowKey) {
-    console.log('rowMap: ', rowMap);
     if (rowMap[rowKey]) {
         rowMap[rowKey].closeRow();
     }
@@ -68,23 +64,17 @@ deleteSectionRow(rowMap, rowKey) {
 }
 
 onRowDidOpen = rowKey => {
-    console.log('This row opened', rowKey);
 };
 
 onSwipeValueChange = swipeData => {
-  console.log(swipeData);
     const { key, value } = swipeData;
     this.rowSwipeAnimatedValues[key].setValue(Math.abs(value));
 };
   
   
   handleClick = (device) => {
-    //this.ble.current.handleClick(device);
-    console.log("handleclick:",device);
     this.props.connectDevice(device);
-    //this.props.navigation.navigate('ColorPicker');
   }
-  //button={true} onPress={() => this.handleClick({BLE})}
   
   openEdit = () => {
     this.props.navigation.navigate('ColorPicker');
@@ -100,65 +90,65 @@ onSwipeValueChange = swipeData => {
         <Header />
         <Content>
         <SwipeListView
-                        data={this.props.BLEList}
-                        renderItem={data => (
-                            <TouchableHighlight
-                                onPress={() => this.handleClick(data.item)}
-                                style={styles.rowFront}
-                                underlayColor={'#AAA'}
-                            >
-                                <View>
-                                    <Text>
-                                        I am {data.item.name} in a SwipeListView
-                                    </Text>
-                                </View>
-                            </TouchableHighlight>
-                        )}
-                        renderHiddenItem={(data, rowMap) => (
-                            <View style={styles.rowBack}>
-                                <Text>Left</Text>
-                                <TouchableOpacity
-                                    style={[
-                                        styles.backRightBtn,
-                                        styles.backRightBtnLeft,
-                                    ]}
-                                    onPress={() =>
-                                        this.openEdit()
-                                    }
-                                >
-                                    <Text style={styles.backTextWhite}>
-                                        Edit
-                                    </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={[
-                                        styles.backRightBtn,
-                                        styles.backRightBtnRight,
-                                    ]}
-                                    onPress={() =>
-                                        this.deleteRow(rowMap, data.item.key)
-                                    }
-                                >
-                                     <Animated.View
-                                        style={[
-                                          styles.trash
-                                      ]}
-                                    >
-                                        <Image
-                                            source={require('./images/trash.png')}
-                                            style={styles.trash}
-                                        />
-                                    </Animated.View>
-                                </TouchableOpacity>
-                            </View>
-                        )}
-                        leftOpenValue={75}
-                        rightOpenValue={-150}
-                        previewRowKey={'0'}
-                        previewOpenValue={-40}
-                        previewOpenDelay={3000}
-                        onRowDidOpen={this.onRowDidOpen}
-                    />
+            data={this.props.BLEList}
+            renderItem={data => (
+                <TouchableHighlight
+                    onPress={() => this.handleClick(data.item)}
+                    style={styles.rowFront}
+                    underlayColor={'#AAA'}
+                >
+                    <View>
+                        <Text>
+                            Tap to connect to: {data.item.name}
+                        </Text>
+                    </View>
+                </TouchableHighlight>
+            )}
+            renderHiddenItem={(data, rowMap) => (
+                <View style={styles.rowBack}>
+                    <Text>Left</Text>
+                    <TouchableOpacity
+                        style={[
+                            styles.backRightBtn,
+                            styles.backRightBtnLeft,
+                        ]}
+                        onPress={() =>
+                            this.openEdit()
+                        }
+                    >
+                        <Text style={styles.backTextWhite}>
+                            Edit
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[
+                            styles.backRightBtn,
+                            styles.backRightBtnRight,
+                        ]}
+                        onPress={() =>
+                            this.deleteRow(rowMap, data.item.key)
+                        }
+                    >
+                            <Animated.View
+                            style={[
+                                styles.trash
+                            ]}
+                        >
+                            <Image
+                                source={require('./images/trash.png')}
+                                style={styles.trash}
+                            />
+                        </Animated.View>
+                    </TouchableOpacity>
+                </View>
+            )}
+            leftOpenValue={75}
+            rightOpenValue={-150}
+            previewRowKey={'0'}
+            previewOpenValue={-40}
+            previewOpenDelay={3000}
+            onRowDidOpen={this.onRowDidOpen}
+        />
         </Content>
         <Footer>
           <BLE></BLE>

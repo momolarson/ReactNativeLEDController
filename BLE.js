@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { Container, Header, Content, List, ListItem, Text} from 'native-base';
+import { Container, Text} from 'native-base';
 import { withNavigation } from 'react-navigation';
 
 class BLE extends React.Component {
@@ -9,7 +9,6 @@ class BLE extends React.Component {
     };
 
     render() {
-      //console.log(this.props);
         return ( 
             <Container>
                 <Text style={{backgroundColor: this.props.color}}>
@@ -22,7 +21,6 @@ class BLE extends React.Component {
 }
 
 function mapStateToProps(state){
-  //console.log(state);
   return{
     BLEList : state.BLEs.BLEList,
     color:state.BLEs.color,

@@ -1,20 +1,14 @@
 import React, { Component } from 'react';
-import { Container, Header, Footer, Content, List, ListItem, Text } from 'native-base';
-import {bindActionCreators} from 'redux';
+import { Container, Header, Footer} from 'native-base';
 import {connect} from 'react-redux';
 import {updateColor} from './actions';
 import { withNavigation } from 'react-navigation';
-import { ColorPicker, TriangleColorPicker,toHsv,fromHsv } from 'react-native-color-picker'
-
-
+import { ColorPicker,toHsv,fromHsv } from 'react-native-color-picker'
 
 class LEDColorPicker extends Component {
-  ble;
   constructor() {
     super()
     this.onColorChange = this.onColorChange.bind(this)
-    this.ble = React.createRef();
-    //State
     this.state = {slider:0,color:toHsv('purple'),BLEcolor:toHsv('purple')}
   }
 

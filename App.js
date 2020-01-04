@@ -13,15 +13,10 @@ import { createStore,applyMiddleware } from 'redux';
 import rootReducer from './reducers/index';
 import thunk from 'redux-thunk';
 
-import { 
-  BleManager,
-  BleError 
-} from 'react-native-ble-plx';
+import {BleManager} from 'react-native-ble-plx';
 
 import BLEList from './BLElist';
 import LEDColorPicker from './ColorPicker';
-
-import { Container, Header,Text } from 'native-base';
 
 import {
   SafeAreaView,
