@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Container, Header, Footer} from 'native-base';
 import {connect} from 'react-redux';
 import {updateColor} from './actions';
-import { withNavigation } from 'react-navigation';
 import { ColorPicker,toHsv,fromHsv } from 'react-native-color-picker'
 
 class LEDColorPicker extends Component {
@@ -49,4 +48,4 @@ const mapDispatchToProps = dispatch => ({
   updateColor: color => dispatch(updateColor(color))
 })
 
-export default connect(mapStateToProps,mapDispatchToProps)(withNavigation(LEDColorPicker));
+export default connect(mapStateToProps,mapDispatchToProps)(LEDColorPicker);

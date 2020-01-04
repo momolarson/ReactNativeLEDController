@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Container, Text} from 'native-base';
 import { withNavigation } from 'react-navigation';
+import { SegmentedControlIOSComponent } from 'react-native';
 
 class BLE extends React.Component {
     constructor(props) {
@@ -15,6 +16,7 @@ class BLE extends React.Component {
                     Status: {this.props.status} 
                 </Text>
                 <Text>Color: {this.props.color}</Text>
+                {this.props.connectedDevice && <Text>Device: {this.props.connectedDevice.name}</Text>}
             </Container>
         );
     }

@@ -13,7 +13,6 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 import { Container, Header, Content, Footer } from 'native-base';
 import BLE from './BLE';
 import {connect} from 'react-redux';
-import { withNavigation } from 'react-navigation';
 import {connectDevice,startScan} from './actions';
 
 
@@ -249,4 +248,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps,mapDispatchToProps)(withNavigation(BLEList));
+export default connect(mapStateToProps,mapDispatchToProps)(BLEList);
