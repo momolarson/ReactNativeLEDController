@@ -87,7 +87,6 @@ onSwipeValueChange = swipeData => {
     return (
       <Container>
         <Header />
-        <Content>
         <SwipeListView
             data={this.props.BLEList}
             renderItem={data => (
@@ -148,7 +147,6 @@ onSwipeValueChange = swipeData => {
             previewOpenDelay={3000}
             onRowDidOpen={this.onRowDidOpen}
         />
-        </Content>
         <Footer>
           <BLE></BLE>
         </Footer>
