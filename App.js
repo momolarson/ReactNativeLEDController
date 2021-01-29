@@ -8,8 +8,8 @@
 
 import React from 'react';
 
-import { Provider } from 'react-redux';
-import { createStore,applyMiddleware } from 'redux';
+import {Provider} from 'react-redux';
+import {createStore, applyMiddleware} from 'redux';
 import rootReducer from './reducers/index';
 import thunk from 'redux-thunk';
 
@@ -38,21 +38,22 @@ import {createStackNavigator} from 'react-navigation-stack';
 
 const MainNavigator = createStackNavigator({
   Home: {screen: BLEList},
-  ColorPicker: {screen:LEDColorPicker}
+  ColorPicker: {screen: LEDColorPicker},
 });
 
 const DeviceManager = new BleManager();
 
 let Navigation = createAppContainer(MainNavigator);
 
-const store = createStore(rootReducer, applyMiddleware(thunk.withExtraArgument(DeviceManager)));
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk.withExtraArgument(DeviceManager)),
+);
 
 const App: () => React$Node = () => {
-
-
   return (
     <>
-      <Provider store={ store }>
+      <Provider store={store}>
         <Navigation />
       </Provider>
     </>
